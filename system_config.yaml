@@ -1,0 +1,216 @@
+base_url: http://localhost:8000/api
+components:
+  test_test:
+    args:
+    call_main:
+      args:
+        arg1:
+          required: False
+          max_length: 123
+      path: /test/etest/
+  sql_db:
+    args:
+      db_path: ${DB_PATH}
+    execute_query:
+      args:
+        query:
+          max_length: 8192
+          required: true
+        data:
+          required: false
+          default: null
+    create_table:
+      args:
+        table:
+          max_length: 1024
+          required: true
+        columns:
+          required: true
+          max_length: 8192
+    insert_data:
+      args:
+        table:
+          required: true
+          max_length: 1024
+        data:
+          required: true
+    update_data:
+      args:
+        table:
+          required: true
+          max_length: 1024
+        data:
+          required: true
+        condition:
+          required: true
+          max_length: 8192
+        condition_params:
+          required: true
+    delete_data:
+      args:
+        table:
+          required: true
+          max_length: 1024
+        condition:
+          required: true
+          max_length: 8192
+        condition_params:
+          required: true
+  data_processor:
+    args:
+    call_process_file:
+      args:
+        file_path:
+          required: true
+          max_length: 1024
+      path: /process_from_file/
+    call_main:
+      args:
+        directory_path:
+          required: true
+          max_length: 1024
+      path: /process_from_directory/
+  vector_store:
+    args:
+    call_main:
+      args:
+        collection_name:
+          default: base
+          required: false
+          max_length: 1024
+        query:
+          args:
+            required: true
+            max_length: 1024
+      path: /search/
+    call_get_nodes:
+      args:
+        collection_name:
+          required: false
+          max_length: 1024
+          default: base
+      path: /get_nodes/
+
+  vs_manager:
+    args:
+    build_from_directory:
+      args:
+        directory:
+          required: true
+          max_length: 1024
+        collection_name:
+          required: false
+          max_length: 1024
+          default: base
+
+    build_from_file:
+      args:
+        file_path:
+          required: true
+          max_length: 1024
+        collection_name:
+          required: false
+          max_length: 1024
+          default: base
+        file_uuid:
+          required: false
+          max_length: 1024
+          default: null
+
+    add_from_directory:
+      args:
+      directory:
+        required: true
+        max_length: 1024
+      collection_name:
+        required: false
+        max_length: 1024
+        default: base
+    add_from_file:
+      args:
+      file_path:
+        required: true
+        max_length: 1024
+      collection_name:
+        required: false
+        max_length: 1024
+        default: base
+  rag:
+    args:
+    split_query:
+      args:
+        query:
+          required: true
+          max_length: 1024
+  s3_manager:
+    args:
+    upload_folder:
+      args:
+        local_path:
+          required: true
+          max_length: 1024
+        prefix:
+          required: false
+          max_length: 1024
+          default: test
+    download_file:
+      args:
+        local_path:
+          required: true
+          max_length: 1024
+    list_files:
+      args:
+        prefix:
+          required: false
+          max_length: 1024
+          default: null
+    empty_prefix:
+      args:
+        prefix:
+          required: false
+          max_length: 1024
+          default: null
+    update_prefix:
+      args:
+        local_path:
+          required: true
+          max_length: 1024
+        prefix:
+          required: false
+          max_length: 1024
+          default: none
+  llm_connector:
+    args:
+    call_llm_stream:
+      args:
+        sys_prompt:
+          required: true
+          max_length: 1024
+        prompt:
+          required: true
+          max_length: 81920
+        temperature:
+          required: false
+          default: 0
+        seed:
+          required: false
+          default: 0
+    call_llm_output_json:
+      args:
+        sys_prompt:
+          required: true
+          max_length: 1024
+        prompt:
+          required: true
+          max_length: 81920
+        temperature:
+          required: false
+          default: 0
+        seed:
+          required: false
+          default: 0
+
+envs:
+  db_path: data/sqldb_for_test/database.db
+  base_index_path: data/vector_stores_for_test/example_baseIDXpath
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
